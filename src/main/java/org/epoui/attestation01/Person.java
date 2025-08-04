@@ -11,7 +11,7 @@ public class Person {
     public Person(String name, double money) {
         setName(name);
         setMoney(money);
-        this.bag = new Product[10]; // Начальный размер пакета с продуктами
+        this.bag = new Product[1]; // Начальный размер пакета с продуктами
         this.bagSize = 0;
     }
 
@@ -23,8 +23,8 @@ public class Person {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Имя не может быть пустым");
         }
-        if (name.length() < 2) {
-            throw new IllegalArgumentException("Имя не может быть короче 2-х символов");
+        if (name.length() < 3) {
+            throw new IllegalArgumentException("Имя не может быть короче 3-х символов");
         }
         this.name = name;
     }
