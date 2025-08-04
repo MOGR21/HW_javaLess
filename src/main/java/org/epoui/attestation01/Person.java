@@ -1,23 +1,23 @@
 package org.epoui.attestation01;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Person {
     private String name;
     private double money;
-    private Product[] bag;
-    private int bagSize;
+    private List<Product> bag;
 
     public Person(String name, double money) {
         setName(name);
         setMoney(money);
-        this.bag = new Product[1]; // Начальный размер пакета с продуктами
-        this.bagSize = 0;
+        this.bag = new ArrayList<>();
     }
-
-    public String getName() {
-        return name;
-    }
+    // Геттеры и сеттеры
+    public String getName() { return name; }
+    public double getMoney() { return money; }
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
@@ -29,10 +29,6 @@ public class Person {
         this.name = name;
     }
 
-    public double getMoney() {
-        return money;
-    }
-
     public void setMoney(double money) {
         if (money < 0) {
             throw new IllegalArgumentException("Деньги не могут быть отрицательными");
@@ -40,10 +36,8 @@ public class Person {
         this.money = money;
     }
 
-    public Product[] getBag() {
-        Product[] result = new Product[bagSize];
-        System.arraycopy(bag, 0, result, 0, bagSize);
-        return result;
+    public List<Product> getBag() {
+        return new ArrayList<>(bag);
     }
 
     public boolean buyProduct(Product product) {
@@ -51,28 +45,18 @@ public class Person {
             return false;
         }
         money -= product.getCost();
-        if (bagSize >= bag.length) {
-            Product[] newBag = new Product[bag.length * 2];
-            System.arraycopy(bag, 0, newBag, 0, bag.length);
-            bag = newBag;
-        }
-        bag[bagSize++] = product;
+        bag.add(product);
         return true;
     }
 
     @Override
     public String toString() {
-        if (bagSize == 0) {
+        if (bag.isEmpty()) {
             return name + " - Ничего не куплено";
         }
-        StringBuilder sb = new StringBuilder(name + " - ");
-        for (int i = 0; i < bagSize; i++) {
-            sb.append(bag[i].getName());
-            if (i < bagSize - 1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
+        return name + " - " + bag.stream()
+                .map(Product::getName)
+                .collect(Collectors.joining(", "));
     }
 
     @Override

@@ -11,19 +11,15 @@ public class Product {
         setCost(cost);
     }
 
-    public String getName() {
-        return name;
-    }
+    // Геттеры и сеттеры
+    public String getName() { return name; }
+    public double getCost() { return cost; }
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Название продукта не может быть пустым");
         }
         this.name = name;
-    }
-
-    public double getCost() {
-        return cost;
     }
 
     public void setCost(double cost) {

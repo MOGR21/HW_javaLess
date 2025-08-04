@@ -1,7 +1,8 @@
 package org.epoui.attestation01;
 
 import java.util.Scanner;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 public class App {
     public static void main(String[] args) {
@@ -10,14 +11,14 @@ public class App {
         // Вводим покупателей и их средства
         System.out.println("Введите покупателей и их средства в формате: Имя = Сумма; Имя2 = Сумма2; и т.д.: ");
         String[] peopleInput = scanner.nextLine().split(";\\s*");
-        Person[] people = new Person[peopleInput.length];
+        Map<String, Person> peopleMap = new HashMap<>();
 
         for (int i = 0; i < peopleInput.length; i++) {
             String[] parts = peopleInput[i].split("\\s*=\\s*");
             try {
                 String name = parts[0].trim();
                 double money = Double.parseDouble(parts[1].trim());
-                people[i] = new Person(name, money);
+                peopleMap.put(name, new Person(name, money));
             } catch (Exception e) {
                 System.out.println("Ошибка ввода: " + peopleInput[i]);
                 i--; // Повторяем ввод для этого покупателя
@@ -27,14 +28,14 @@ public class App {
         // Ввод продуктов
         System.out.println("Введите продукты в формате: Название = Цена; Название2 = Цена2 и т.д.: ");
         String[] productsInput = scanner.nextLine().split(";\\s*");
-        Product[] products = new Product[productsInput.length];
+        Map<String, Product> productsMap = new HashMap<>();
 
         for (int i = 0; i < productsInput.length; i++) {
             String[] parts = productsInput[i].split("\\s*=\\s*");
             try {
                 String name = parts[0].trim();
                 double cost = Double.parseDouble(parts[1].trim());
-                products[i] = new Product(name, cost);
+                productsMap.put(name, new Product(name, cost));
             } catch (Exception e) {
                 System.out.println("Ошибка ввода: " + productsInput[i]);
                 i--; // Повторяем ввод для этого продукта
@@ -42,47 +43,45 @@ public class App {
         }
 
         // Процесс покупки
-        for (Person person : people) {
-            System.out.println("\n" + person.getName() + " выбирает продукты:");
+        System.out.println("Введите информацию о покупке в формате: Имя_Покупателя - Наименование_Покупки (для завершения введите 'END'): ");
+        while (true) {
+            String input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("END")) {
+                break;
+            }
 
-            while (true) {
-                System.out.println("Доступные продукты:");
-                for (int i = 0; i < products.length; i++) {
-                    System.out.println((i+1) + ". " + products[i] + "руб");
+            try {
+                String[] parts = input.split("\\s*-\\s*");
+                String personName = parts[0].trim();
+                String productName = parts[1].trim();
+
+                Person person = peopleMap.get(personName);
+                Product product = productsMap.get(productName);
+
+                if (person == null) {
+                    System.out.println("Покупатель не найден: " + personName);
+                    continue;
+                }
+                if (product == null) {
+                    System.out.println("Продукт не найден: " + productName);
+                    continue;
                 }
 
-                System.out.println("Введите номер продукта для покупки (или END для завершения покупок):");
-                String input = scanner.nextLine().trim();
-
-                if (input.equalsIgnoreCase("END")) {
-                    break;
+                if (person.buyProduct(product)) {
+                    System.out.println(personName + " купил " + productName);
+                } else {
+                    System.out.println(personName + " не может позволить себе " + productName);
                 }
-
-                try {
-                    int productIndex = Integer.parseInt(input) - 1;
-                    if (productIndex < 0 || productIndex >= products.length) {
-                        System.out.println("Неверный номер продукта");
-                        continue;
-                    }
-
-                    Product product = products[productIndex];
-                    if (person.buyProduct(product)) {
-                        System.out.println(person.getName() + " купил " + product.getName());
-                    } else {
-                        System.out.println(person.getName() + " не может позволить себе " + product.getName());
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Неверный ввод. Введите номер продукта или END");
-                }
+            } catch (Exception e) {
+                System.out.println("Неверный формат ввода. Используйте: Имя - Продукт");
             }
         }
 
         // Вывод результатов
         System.out.println("\nРезультаты покупок:");
-        for (Person person : people) {
+        for (Person person : peopleMap.values()) {
             System.out.println(person);
         }
-
         scanner.close();
     }
 }
