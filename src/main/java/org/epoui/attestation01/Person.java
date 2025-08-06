@@ -19,7 +19,7 @@ public class Person {
     public String getName() { return name; }
     public double getMoney() { return money; }
 
-    public void setName(String name) {
+     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Имя не может быть пустым");
         }
@@ -41,9 +41,12 @@ public class Person {
     }
 
     public boolean buyProduct(Product product) {
+        Objects.requireNonNull(product, "Продукт не может быть null");
+
         if (product.getCost() > money) {
             return false;
         }
+
         money -= product.getCost();
         bag.add(product);
         return true;
