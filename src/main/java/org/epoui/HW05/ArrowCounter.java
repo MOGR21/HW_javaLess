@@ -1,4 +1,4 @@
-package org.epoui;
+package org.epoui.HW05;
 
 import java.util.Scanner;
 

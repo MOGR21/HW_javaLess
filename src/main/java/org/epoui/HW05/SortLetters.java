@@ -1,3 +1,5 @@
+package org.epoui.HW05;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
