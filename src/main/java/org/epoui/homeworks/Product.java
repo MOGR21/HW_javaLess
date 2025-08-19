@@ -1,4 +1,4 @@
-package org.epoui.attestation01;
+package org.epoui.homeworks;
 
 import java.util.Objects;
 
@@ -19,12 +19,18 @@ public class Product {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Название продукта не может быть пустым");
         }
+        if (name.length() < 3) {
+            throw new IllegalArgumentException("Название продукта не может быть короче 3 символов");
+        }
+        if (name.matches("^\\d+$")) {
+            throw new IllegalArgumentException("Название продукта не может состоять только из цифр");
+        }
         this.name = name;
     }
 
     public void setCost(double cost) {
-        if (cost < 0) {
-            throw new IllegalArgumentException("Стоимость продукта не может быть отрицательной");
+        if (cost <= 0) {
+            throw new IllegalArgumentException("Стоимость продукта должна быть положительной");
         }
         this.cost = cost;
     }
