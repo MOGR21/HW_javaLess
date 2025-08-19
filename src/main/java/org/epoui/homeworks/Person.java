@@ -41,7 +41,7 @@ public class Person {
     }
 
     public boolean buyProduct(Product product) {
-        Objects.requireNonNull(product, "Продукт не может быть null");
+        Objects.requireNonNull(product, "Продукт не может быть пустым");
 
         if (product.getCost() > money) {
             return false;

@@ -20,7 +20,7 @@ public class DiscountProduct extends Product {
         this.discount = discount;
 
         // Гарантируем, что дата не будет null
-        this.discountEndDate = Objects.requireNonNull(discountEndDate, "Дата окончания скидки не может быть null");
+        this.discountEndDate = Objects.requireNonNull(discountEndDate, "Дата окончания скидки не может быть пустой");
     }
 
     @Override
